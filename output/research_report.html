@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI时代的四堵墙——算力·能源·数据·信任：算法内卷之外的infra研究（A股观察清单）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>if(typeof echarts==='undefined'){document.write('<script src="https://unpkg.com/echarts@5.5.0/dist/echarts.min.js"><\/script>')}</script>
+<style>
+:root{--primary:#1a3a5c;--primary-2:#4a7ba6;--accent:#c0392b;--pos:#2e7d5b;--warn:#d68910;--ink:#22303c;--muted:#6b7a89;--line:#dfe6ec;--bg:#f4f7fa;--card:#ffffff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px;}
+.page{max-width:1180px;margin:0 auto;padding:0 20px 60px;}
+/* 封面 */
+.cover{background:linear-gradient(135deg,#12293f 0%,#1a3a5c 60%,#2b567e 100%);color:#fff;border-radius:0 0 18px 18px;padding:56px 48px 44px;margin-bottom:28px;}
+.cover .kicker{letter-spacing:.35em;font-size:12px;opacity:.75;margin-bottom:14px;}
+.cover h1{font-size:34px;font-weight:700;line-height:1.35;margin-bottom:10px;}
+.cover .sub{font-size:16px;opacity:.9;margin-bottom:22px;}
+.cover .meta{display:flex;gap:26px;flex-wrap:wrap;font-size:13px;opacity:.85;border-top:1px solid rgba(255,255,255,.25);padding-top:16px;}
+.cover .disclaimer-one{font-size:12px;opacity:.65;margin-top:12px;}
+/* 目录 */
+.toc{display:flex;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:28px;position:sticky;top:8px;z-index:50;box-shadow:0 2px 10px rgba(26,58,92,.06);}
+.toc a{color:var(--primary);text-decoration:none;font-size:13px;padding:4px 10px;border-radius:20px;background:#eef3f8;white-space:nowrap;}
+.toc a:hover{background:var(--primary);color:#fff;}
+/* 章节 */
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 34px;margin-bottom:26px;box-shadow:0 1px 6px rgba(26,58,92,.05);}
+h2{font-size:21px;color:var(--primary);border-left:5px solid var(--primary);padding-left:12px;margin-bottom:18px;line-height:1.45;}
+h3{font-size:16.5px;color:var(--primary);margin:20px 0 10px;}
+h4{font-size:15px;color:var(--ink);margin:14px 0 8px;}
+p{margin-bottom:10px;}
+ul,ol{padding-left:22px;margin-bottom:10px;}
+li{margin-bottom:6px;}
+strong{color:var(--primary);}
+.hl-pos{color:var(--pos);font-weight:600;}
+.hl-neg{color:var(--accent);font-weight:600;}
+.hl-warn{color:var(--warn);font-weight:600;}
+.verdict{background:#f0f5fa;border:1px solid #cddceb;border-radius:10px;padding:16px 20px;margin:14px 0;}
+.verdict .tag{display:inline-block;background:var(--primary);color:#fff;font-size:12px;padding:2px 10px;border-radius:4px;margin-right:8px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:900px){.grid2{grid-template-columns:1fr;}}
+.callout{border-left:4px solid var(--warn);background:#fdf8ef;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14px;}
+.callout.blue{border-left-color:var(--primary-2);background:#f0f5fa;}
+/* 表格 */
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:12px 0;}
+th{background:var(--primary);color:#fff;padding:7px 8px;text-align:left;font-weight:600;white-space:nowrap;}
+td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;}
+tr:nth-child(even) td{background:#f7fafc;}
+tr:hover td{background:#eef3f8;}
+td.num,th.num{text-align:right;}
+tr.stat td{background:#e8eff6 !important;font-weight:700;color:var(--primary);}
+tr.wallrow td{background:#dce7f1 !important;font-weight:700;color:var(--primary);letter-spacing:.05em;}
+.table-wrap{overflow-x:auto;}
+.foot{font-size:11.5px;color:var(--muted);margin-top:6px;}
+/* 图表 */
+.chart{width:100%;height:380px;margin:10px 0 2px;}
+.chart-sm{height:330px;}
+.chart-note{font-size:11.5px;color:var(--muted);margin-bottom:12px;}
+/* 徽章 */
+.badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;color:#fff;margin-right:4px;}
+.b-core{background:var(--primary);}
+.b-elas{background:var(--warn);}
+.b-opt{background:#8e6bbf;}
+.b-wall{background:#5b8db8;}
+.pill{display:inline-block;background:#eef3f8;color:var(--primary);border-radius:14px;padding:2px 10px;font-size:12px;margin:2px 4px 2px 0;}
+/* 免责 */
+.disclaimer{font-size:12.5px;color:var(--muted);background:#f4f6f8;border:1px dashed var(--line);border-radius:10px;padding:18px 22px;}
+@media print{.toc{display:none;}section{box-shadow:none;break-inside:avoid-page;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ================= 封面 ================= -->
+<div class="cover">
+  <div class="kicker">INDUSTRY RESEARCH · AI INFRASTRUCTURE</div>
+  <h1>AI时代的四堵墙：算力 · 能源 · 数据 · 信任</h1>
+  <div class="sub">算法内卷之外的不变量——四墙垄断论断验证与A股观察清单（35只标的 · 2026中报口径）</div>
+  <div class="meta">
+    <span>报告日期：2026-09-25</span>
+    <span>市场范围：A股</span>
+    <span>数据口径：2026年中报（报告期2026-06-30）＋最新收盘估值</span>
+    <span>标的池市值合计：约75,760亿元</span>
+  </div>
+  <div class="disclaimer-one">本报告由AI基于公开信息与金融数据终端整理生成，仅供研究参考，不构成任何投资建议。投资有风险，决策需谨慎。</div>
+</div>
+
+<!-- ================= 目录 ================= -->
+<div class="toc">
+  <a href="#s1">一、核心结论</a>
+  <a href="#s2">二、行业全景</a>
+  <a href="#s3">三、算力墙</a>
+  <a href="#s4">四、能源墙</a>
+  <a href="#s5">五、数据墙</a>
+  <a href="#s6">六、信任墙</a>
+  <a href="#s7">七、竞争格局</a>
+  <a href="#s8">八、估值对比</a>
+  <a href="#s9">九、观察清单</a>
+  <a href="#s10">十、免责声明</a>
+</div>
+
+<!-- ================= 一、核心结论 ================= -->
+<section id="s1">
+  <h2>一、核心结论：四墙是"必要条件"，垄断性要分层打分</h2>
+  <p>针对"四墙是infra级别的东西，不会随算法内卷而变化，容易形成垄断市场"这一论断，本研究给出的判定是：<strong>方向正确，但需要三层修正</strong>。</p>
+  <div class="verdict">
+    <p><span class="tag">论断验证</span><strong>"infra级别、位于算法竞争之外"——基本成立。</strong>算力、能源、数据是物理约束与资本约束，模型算法的效率竞赛改变的是单位智能的消耗，不消灭总量需求（推理成本下降→用量扩张的杰文斯效应已在光模块订单上兑现：1.6T产品订单已排至2027年，来源：新浪财经2026-08-22）。</p>
+    <p><span class="tag">修正一</span><strong>"不会变"过头了——墙不变，砖会换。</strong>墙上的技术路线持续迭代：可插拔光模块→CPO/OIO、风冷→液冷、云端推理→端侧推理、真实数据→合成数据。子环节呈周期性（光模块历史上多轮量价周期、存储价格周期），"不变"的是需求本身而非竞争格局。</p>
+    <p><span class="tag">修正二</span><strong>"容易形成垄断"分层成立：</strong>能源墙（特许经营/资源独占，垄断属性最强但受电价管制）≈ 算力墙（全球寡头格局，但A股多为供应链参与者而非垄断租金收取者）＞ 数据墙（排他性资产，垄断取决于确权与合规框架）＞＞ 信任墙（标准未定、格局碎片化，<span class="hl-neg">目前是"政策墙"而非"垄断墙"</span>）。</p>
+    <p><span class="tag">修正三</span><strong>四墙的共同金主是同一批人。</strong>北美四大云厂商2026Q2资本开支合计约1,639亿美元（同比+86%）、字节跳动2026年AI基建支出上调至2,000亿元（来源：中原证券2026-08-12、基金经理观点2026-06-16）。需求集中度即系统性风险——这是"垄断论"最大的隐藏对手。</p>
+  </div>
+  <h3>四墙速览</h3>
+  <ul>
+    <li><strong>算力墙</strong>（市值4.29万亿，占标的池57%）：云端已充分定价，<span class="hl-warn">端侧Agent硬件与机器人是"下一棒"</span>——AI眼镜中芯片占成本大头（SoC/MCU/存储/电源/射频），Rokid、小米已位列全球AI眼镜第二、第三（来源：中原证券2026-08-12）；特斯拉2026年资本开支同比+142%，投向AI基础设施、Robotaxi与人形机器人（来源：同花顺2026-09-13）。</li>
+    <li><strong>能源墙</strong>（1.45万亿）：中国不缺电量——2025年全社会用电量10.37万亿千瓦时、算力中心用电仅1,700亿千瓦时（占1.6%）；<span class="hl-warn">缺的是"高峰时段可调度的清洁容量"</span>。2030年算力用电占比预计升至6%（国家能源局口径），叠加双碳约束，核电、电网、液冷、储能是确定受益结构。</li>
+    <li><strong>数据墙</strong>（1.70万亿，剔除中国移动后仅约2,055亿）：互联网高质量语料红利见顶，稀缺性转向Agent交互轨迹数据与具身智能数据；国家数据局已推动39城数据标注先行先试（2026数博会）。</li>
+    <li><strong>信任墙</strong>（仅1,397亿，占1.8%）：《人工智能法》立法进程加快（发改委2026-07-31）、欧盟AI法案2026-08-02进入实施阶段；但A股纯标的2026年中报几乎全线亏损——<span class="hl-neg">它是立法期权，还不是垄断资产</span>。</li>
+  </ul>
+  <p class="foot">注：标的池为本研究选定的35只四墙代表股，市值口径为iFinD最新收盘（2026-09-25前后），下同。</p>
+</section>
+
+<!-- ================= 二、行业全景 ================= -->
+<section id="s2">
+  <h2>二、行业全景：AI资本开支进入万亿美元量级，四墙成为"算法之外"的共识叙事</h2>
+  <div class="grid2">
+    <div>
+      <h3>需求侧：全球AI基建支出仍在加速</h3>
+      <ul>
+        <li>北美四大云厂商（谷歌/微软/Meta/亚马逊）2026Q1资本开支约1,288亿美元（同比+81%），Q2约1,639亿美元（同比+86%，环比+27%）；谷歌将全年资本开支上调至1,800–1,900亿美元，Meta上修至1,250–1,450亿美元（来源：中原证券2026-08-12、2026-06-16）。</li>
+        <li>国内：某大型互联网平台2026财年资本开支1,261亿元（+47%）；字节跳动将2026年AI基建支出由1,600亿元上调至2,000亿元（来源：基金经理观点提炼，2026-06-16）。基金经理判断"全球AI资本开支已来到万亿美元级别"。</li>
+        <li>设备与制造：台积电2026年资本开支上调至600–640亿美元、2nm加速爬坡；2026年全球半导体制造设备销售额预计1,688亿美元（同比+25%），先进封装（HBM/CoWoS）产能紧张（来源：综合行业周报2026-07-19）。</li>
+      </ul>
+    </div>
+    <div>
+      <h3>四墙的宏观刻度</h3>
+      <ul>
+        <li><strong>能源</strong>：2025年中国算力中心用电量1,700亿千瓦时，占全社会用电量1.6%，预计2030年升至6%（国家能源局，转引自粤开证券2026-08-13）。TrendForce预估2026年全球数据中心电力需求容量161GW（+31%），其中AI服务器占33.4%；2030年需求490.7GW对电网可供给222.6GW，<span class="hl-neg">缺口268GW</span>（来源：金融界2026-09-22）。</li>
+        <li><strong>数据</strong>：数据标注成本已占AI项目总研发成本60%以上、部分垂域超80%（来源：CSDN行业分析2026-06-07）；全国39城启动数据标注试点，重点覆盖医疗健康与具身智能（来源：2026数博会报道2026-09-02）。</li>
+        <li><strong>信任</strong>：截至2025年12月我国生成式AI用户规模6.02亿；2026年上半年公安机关侦办AI生成虚假信息案件170余起、开展AI应用监督检查600余次（来源：科技日报2026-07-24）。</li>
+      </ul>
+    </div>
+  </div>
+  <div id="chartPower" class="chart"></div>
+  <p class="chart-note">图1：中国全社会用电量（2015–2025）。数据来源：中国电力统计年鉴（经同花顺iFinD EDB取数）；2025年增速5.21%为按2024年基数自行计算。算力中心2025年用电占比仅1.6%——能源墙的矛盾不在总量，而在结构。</p>
+  <div id="chartCapex" class="chart chart-sm"></div>
+  <p class="chart-note">图2：北美四大云厂商资本开支（2026Q1/Q2，亿美元）与中国算力用电占比展望。数据来源：中原证券研报（2026-08-12）、国家能源局（转引自粤开证券2026-08-13）。</p>
+  <h3>驱动因素与逆风</h3>
+  <table>
+    <tr><th style="width:90px">维度</th><th>驱动</th><th>逆风</th></tr>
+    <tr><td>算力墙</td><td>云厂商资本开支上调、1.6T光模块放量、国产替代、端侧AI硬件起量</td><td>CPO技术替代可插拔、估值对资本开支增速高度敏感、供应链地缘风险</td></tr>
+    <tr><td>能源墙</td><td>算力用电2025–2030年约4–5倍扩张预期、电网投资加码、液冷渗透率提升</td><td>电价市场化下行（核电/绿电2026H1利润大幅下滑已印证）、消纳与调峰瓶颈</td></tr>
+    <tr><td>数据墙</td><td>39城数据标注试点、数据要素市场化、具身智能数据刚需</td><td>合成数据对人工标注的替代、商业模式以项目制为主、版权确权不确定</td></tr>
+    <tr><td>信任墙</td><td>《人工智能法》立法加快、欧盟AI法案实施、数字水印2026-12-02大限</td><td>板块普遍亏损、付费主体是合规预算而非增值需求、竞争碎片化</td></tr>
+  </table>
+  <h3>近期催化剂时间线</h3>
+  <ul>
+    <li><span class="pill">2026-08-02</span>欧盟AI法案正式进入实施阶段（来源：广西新闻网2026-08-18）</li>
+    <li><span class="pill">2026-08-13</span>粤开证券发布中美电力比较，算力用电占比数据引发讨论</li>
+    <li><span class="pill">2026-09-02</span>2026数博会：国家数据局新增32城数据标注试点（累计39城）</li>
+    <li><span class="pill">2026-09-22</span>TrendForce发布2030年全球数据中心电力缺口268GW预估</li>
+    <li><span class="pill">2026-12-02</span>欧盟AI生成内容数字水印系统部署大限（来源：CSDN 2026-06-04）</li>
+    <li><span class="pill">待定</span>中国《人工智能法》立法进程（发改委已表态加快）</li>
+  </ul>
+</section>
+
+<!-- ================= 三、算力墙 ================= -->
+<section id="s3">
+  <h2>三、算力墙：训练集群之后，端侧Agent与机器人是下一波芯片增量</h2>
+  <h3>3.1 已兑现的三块"砖"：算力卡、存储、光模块</h3>
+  <p>2026年中报确认了云端算力的景气高点仍在延续：<strong>中际旭创</strong>2026H1营收417.8亿元（+182.5%）、归母净利136.5亿元（+247.3%），1.6T硅光模块全球市占率超五成、订单排至2027年；<strong>新易盛</strong>营收209.1亿元（+100.3%）、ROE(TTM)高达54.0%；<strong>寒武纪</strong>营收60.0亿元（+108.1%）；存储链上<strong>兆易创新</strong>营收115.7亿元（+178.7%）、净利同比+1071.2%，<strong>澜起科技</strong>净利+74.5%——HBM挤占利基产能带来的存储超级周期是2026年最陡峭的利润曲线（数据：iFinD，2026中报）。</p>
+  <h3>3.2 用户之问：个人终端Agent与机器人会触发什么芯片？</h3>
+  <p>这是算力墙内部价值迁移的关键判断。云端训练集群的逻辑（性能优先、不计功耗）在端侧完全反转——<strong>低功耗、实时性、多模态、成本</strong>成为第一约束，触发的芯片品类与云端几乎不重叠：</p>
+  <table>
+    <tr><th>品类</th><th>功能角色</th><th>代表A股公司（本池）</th><th>2026H1验证信号</th></tr>
+    <tr><td>端侧SoC+NPU</td><td>Agent本地推理大脑（AI眼镜/AI PC/机器人头部）</td><td>瑞芯微、恒玄科技</td><td>瑞芯微营收+40.6%、ROE 27.8%；恒玄营收-30.3%（产品切换期，竞争激烈）</td></tr>
+    <tr><td>存储（NOR/LPDDR/MCU）</td><td>端侧模型权重与代码存储、实时控制</td><td>兆易创新</td><td>NOR全球前二，存储涨价+1071%净利</td></tr>
+    <tr><td>CIS图像传感器</td><td>机器人与AI眼镜的视觉感知入口</td><td>豪威集团（原韦尔股份）</td><td>CIS占营收73.6%，PE仅31.6倍——盈利兑现中</td></tr>
+    <tr><td>模拟/PMIC/射频</td><td>供电、音频、连接（端侧BOM大头）</td><td>（池外：艾为电子等）</td><td>艾为电子"自研NPU+全栈算法"进军端侧AI（新浪财经2026-06-07）</td></tr>
+    <tr><td>先进封装/设备</td><td>端侧芯片的Chiplet异构集成与国产产能</td><td>长电科技、北方华创</td><td>2026年全球设备市场预计+25%至1,688亿美元</td></tr>
+  </table>
+  <div class="callout">
+    <strong>判断：</strong>端侧与机器人芯片是"下一棒"，但要注意它与"垄断论"的张力——端侧SoC市场<strong>碎片化、格局未定</strong>（恒玄2026H1营收-30.3%就是竞争烈度的直接证据），单机价值量低于训练集群但出货量是消费电子级别。AI眼镜已给出早期验证：芯片占AI眼镜成本大部分，Rokid与小米位列全球第二、第三（来源：中原证券2026-08-12）；特斯拉资本开支+142%流向Robotaxi与人形机器人（来源：同花顺2026-09-13）。<strong>端侧是成长逻辑，不是垄断逻辑；买端侧买的是"量"，买云端买的是"份额"。</strong>
+  </div>
+</section>
+
+<!-- ================= 四、能源墙 ================= -->
+<section id="s4">
+  <h2>四、能源墙：中国不缺电量，缺的是"高峰可调度的清洁容量"</h2>
+  <h3>4.1 总量判断：短期内不缺电，结构上有三类缺口</h3>
+  <p>总量层面中国电力是宽松的：2025年全社会用电量10.37万亿千瓦时（+5.2%），全国发电装机容量远超峰值负荷，2026年电力供需总体平衡偏松。算力中心2025年用电量1,700亿千瓦时，仅占全社会用电量1.6%（国家能源局）。<strong>"中国不缺电"在总量意义上目前成立。</strong></p>
+  <p>但"缺电"会在三个结构性场景中出现（以下为分析推断，数据锚点已标注）：</p>
+  <table>
+    <tr><th style="width:110px">缺口类型</th><th>机理</th><th>量化锚点</th><th>投资映射</th></tr>
+    <tr><td>① 时序缺口</td><td>AI负荷24×7高载且毫秒级波动，与风光间歇性错配；晚峰与无风无光时段需要可调度容量</td><td>高盛：AI加速服务器用电年均+30%；英国Uptime Institute警示毫秒级功耗震荡冲击电网设备（网易2026-08-06）</td><td>调峰电源、储能（中金数据乌兰察布基地配4.5万千瓦储能）、核电基荷</td></tr>
+    <tr><td>② 空间缺口</td><td>算力枢纽集中于中东部，能源在西部；电网节点承载与输电走廊跟不上算力扩产</td><td>TrendForce：2030年全球DC电力需求490.7GW vs 电网可供给222.6GW，<span class="hl-neg">缺口268GW</span>（金融界2026-09-22）</td><td>特高压/电网设备（国电南瑞、特变电工）、变压器出海（金盘科技）</td></tr>
+    <tr><td>③ 机制缺口</td><td>新能源全面入市后电价下行压制投资回报，远期装机增速存在放缓风险</td><td>本池印证：中国核电2026H1归母净利-36.0%、三峡能源-64.3%（电价与消纳压力）</td><td>电价企稳前的左侧信号；绿电直供/绿证交易机制完善是拐点</td></tr>
+  </table>
+  <h3>4.2 什么情况下会"真缺电"？</h3>
+  <p>推演（分析推断）：若2030年算力用电占比达到6%（国家能源局预期上沿），对应约7,000–8,000亿千瓦时、为2025年的4–5倍；叠加电动车、空调热泵、制造业电气化（安联投资：全球电力需求未来五年年均+3.6%，四驱动之一即数据中心，来源：智通财经2026-09-22），中国年用电增速需持续维持5%以上。<strong>在煤电审批收紧（双碳约束）、核电建设周期5–7年、长时储能经济性尚未跑通的前提下，2028–2030年部分算力枢纽区域的高峰时段可能出现"容量性缺电"——缺的不是电量（energy），是容量（capacity）。</strong></p>
+  <h3>4.3 环保要素：双碳是能源墙的"隐形宪法"</h3>
+  <ul>
+    <li><strong>约束侧</strong>：双碳目标限制煤电新增，AI耗电的扩张必须以绿电+核电+储能的组合承接，煤电只承担应急调峰——这决定了算力中心与绿电基地、核电基地的"算电协同"选址逻辑（东数西算向零碳基地迁移）。</li>
+    <li><strong>受益侧</strong>：①零碳基荷——核电（中国核电，但需等待电价机制理顺）；②节能——液冷将PUE从风冷的1.3–1.5压至1.1–1.25，英维克为温控龙头；③消纳——储能与绿证交易机制；④绿色溢价——出海变压器/电源设备需满足欧美能效与碳足迹标准（金盘科技干式变压器）。</li>
+    <li><strong>风险侧</strong>：绿电运营商正为电价市场化付学费（三峡能源2026H1净利-64.3%、PE仍达92倍），环保属性不自动等于投资回报，机制理顺前保持左侧观察。</li>
+  </ul>
+</section>
+
+<!-- ================= 五、数据墙 ================= -->
+<section id="s5">
+  <h2>五、数据墙：互联网语料见顶，稀缺性转向Agent轨迹与具身数据</h2>
+  <h3>5.1 三段演化</h3>
+  <ol>
+    <li><strong>互联网文本（已见顶）</strong>：高质量公开语料的边际成本急剧上升，数据标注成本已占AI项目总研发成本60%以上（来源：CSDN 2026-06-07）。模型能力竞争从"喂语料"转向"喂过程"。</li>
+    <li><strong>Agent级交互数据（进行中）</strong>：从"问答对"转向完整记录指令理解、任务拆解、工具调用、异常恢复、结果验证的<strong>全轨迹工程化数据</strong>（来源：同花顺2026-08-10）。SFT/RLHF/多模态对齐/Agent轨迹标注成为核心增量，标注从劳动密集升级为知识密集。</li>
+    <li><strong>机器人/具身数据（最难获取）</strong>：真机遥操作成本高、物理交互无法从互联网抓取，行业转向"仿真+合成数据+专用采集设备"混合路线——数据堂发布6目Ego具身智能数据集（采集精度：指令与行为匹配准确率98%，来源：同花顺2026-08-20）；腾讯云发布Agent Storage解决"数据堰塞湖"（来源：腾讯云2026-06-08）。</li>
+  </ol>
+  <h3>5.2 政策与商业模式</h3>
+  <p>国家数据局以39城数据标注先行先试为抓手推动高质量数据集建设，重点覆盖医疗健康与具身智能（2026数博会）；机器人产业界联合发起《机器人产业数据质量与标准创新联合倡议》。数据要素正在走"确权→入表→交易"的资产化路径——<strong>数据墙的"垄断"不来自技术，而来自数据主权、版权排他与合规壁垒</strong>，是政策变量大于技术变量的一堵墙。</p>
+  <div class="callout blue">
+    <strong>A股映射的现状：</strong>本池数据墙共8家、市值1.70万亿，但其中中国移动一家占1.50万亿（88%）；剔除运营商后仅约2,055亿，与信任墙体量相当。<strong>真正"量价齐升+低估值"的只有IDC的润泽科技</strong>（2026H1营收+50.1%、PE 20.8倍）；版权语料类（视觉中国、中文在线）基本面兑现弱，主题属性大于资产属性；数据服务（海天瑞声）市值仅54亿、PE高达270倍——数据墙在A股是"资产稀缺、标的稀缺、估值昂贵"的组合。
+  </div>
+</section>
+
+<!-- ================= 六、信任墙 ================= -->
+<section id="s6">
+  <h2>六、信任墙：立法加速但商业模式未闭环，是政策墙而非垄断墙</h2>
+  <h3>6.1 制度供给正在加速</h3>
+  <ul>
+    <li><strong>中国</strong>：发改委2026-07-31表态加快《人工智能法》立法进程；《人工智能安全治理框架》1.0版落地实施，《人工智能示范法3.0》发布；网信办2026年2月更新《生成式人工智能服务管理暂行办法》；四部门发布《人工智能生成合成内容标识办法》（来源：广西新闻网2026-08-18、科技日报2026-07-24）。</li>
+    <li><strong>欧盟</strong>：AI法案2026-08-02正式进入实施，首次立法全面禁止AI深度伪造色情内容（最高罚全球年营收7%）；图像/视频生成类AI须在2026-12-02前完成数字水印部署（来源：CSDN 2026-06-04）。</li>
+    <li><strong>执法</strong>：2026年上半年公安侦办AI生成虚假信息案件170余起，AI应用监督检查600余次；77.16%受访公众认为深度伪造首要危害是"传播虚假信息、扰乱社会秩序"（来源：科技日报2026-07-24、腾讯新闻2026-08-07）。</li>
+  </ul>
+  <h3>6.2 三个未解之题对应三条产业路径</h3>
+  <table>
+    <tr><th>问题</th><th>制度方向</th><th>产业路径（A股映射）</th></tr>
+    <tr><td>AI的问题谁负责？</td><td>责任认定、平台审查义务、刑事入罪标准明确化</td><td>合规与评估工具、法律科技；数字水印/内容标识</td></tr>
+    <tr><td>潜在安全风险怎么分析？</td><td>AI安全评估机制、重点监测、红队测试</td><td>安全测评（深信服、奇安信类）；AI防火墙/大模型防护</td></tr>
+    <tr><td>安全边界怎么约束？</td><td>分级监管（欧4级/中包容审慎）、强制标识</td><td>鉴伪取证（国投智能）、密码基础设施（三未信安）、信创底座（达梦数据）</td></tr>
+  </table>
+  <div class="callout">
+    <strong>为什么说它还不是"垄断墙"：</strong>本池信任墙7家公司2026H1仅深信服（净利+201.6%扭亏回升）与达梦数据（净利+6.7%、毛利率95.7%）盈利，奇安信、安恒信息、国投智能等仍在亏损，且营收体量小、应收账款周转天数普遍在130–600天区间（政府/大企业客户回款慢）。<strong>需求真实存在，但付费主体是"合规预算"而非"增值预算"，收入弹性取决于立法与执法落地节奏。</strong>用垄断框架给信任墙定价为时过早——它是四墙中唯一的期权型资产，也因此在市值上被市场只给了1.8%的权重。
+  </div>
+</section>
+
+<!-- ================= 七、竞争格局 ================= -->
+<section id="s7">
+  <h2>七、竞争格局：算力墙赢家已跑出，信任墙仍在混战</h2>
+  <h3>7.1 四墙全景对标表（35只，2026中报口径）</h3>
+  <p class="foot">市值/估值：iFinD最新收盘（2026-09-25前后）；财务：2026-06-30报告期；"—"为未获取或不适用；"亏损"指PE(TTM)为负。点击表格可横向滚动。</p>
+  <div class="table-wrap">
+  <table>
+    <tr><th>公司</th><th>代码</th><th class="num">市值(亿)</th><th class="num">PE(TTM)</th><th class="num">PB</th><th class="num">营收(亿)</th><th class="num">营收增速</th><th class="num">归母净利(亿)</th><th class="num">净利增速</th><th class="num">ROE(TTM)</th><th class="num">毛利率</th></tr>
+    <tr class="wallrow"><td colspan="11">算力墙（11家 · 市值合计42,860亿）</td></tr>
+    <tr><td>中际旭创</td><td>300308.SZ</td><td class="num">10,624</td><td class="num">51.6</td><td class="num">26.5</td><td class="num">417.8</td><td class="num hl-pos">+182.5%</td><td class="num">136.5</td><td class="num hl-pos">+247.3%</td><td class="num">51.3%</td><td class="num">45.4%</td></tr>
+    <tr><td>寒武纪</td><td>688256.SH</td><td class="num">6,864</td><td class="num">206.0</td><td class="num">41.1</td><td class="num">60.0</td><td class="num hl-pos">+108.1%</td><td class="num">23.1</td><td class="num hl-pos">+122.7%</td><td class="num">24.6%</td><td class="num">55.0%</td></tr>
+    <tr><td>新易盛</td><td>300502.SZ</td><td class="num">6,067</td><td class="num">46.2</td><td class="num">23.9</td><td class="num">209.1</td><td class="num hl-pos">+100.3%</td><td class="num">75.3</td><td class="num hl-pos">+91.9%</td><td class="num">54.0%</td><td class="num">48.3%</td></tr>
+    <tr><td>海光信息</td><td>688041.SH</td><td class="num">5,771</td><td class="num">183.7</td><td class="num">22.4</td><td class="num">91.0</td><td class="num hl-pos">+66.5%</td><td class="num">18.0</td><td class="num">+25.7%</td><td class="num">12.4%</td><td class="num">55.8%</td></tr>
+    <tr><td>北方华创</td><td>002371.SZ</td><td class="num">4,739</td><td class="num">83.4</td><td class="num">11.9</td><td class="num">201.6</td><td class="num">+24.9%</td><td class="num">33.7</td><td class="num">+0.9%</td><td class="num">14.0%</td><td class="num">39.3%</td></tr>
+    <tr><td>兆易创新</td><td>603986.SH</td><td class="num">2,714</td><td class="num">34.1</td><td class="num">7.2</td><td class="num">115.7</td><td class="num hl-pos">+178.7%</td><td class="num">68.6</td><td class="num hl-pos">+1071.2%</td><td class="num">21.3%</td><td class="num">56.9%</td></tr>
+    <tr><td>澜起科技</td><td>688008.SH</td><td class="num">2,651</td><td class="num">85.2</td><td class="num">12.1</td><td class="num">33.4</td><td class="num">+26.7%</td><td class="num">20.0</td><td class="num hl-pos">+74.5%</td><td class="num">14.3%</td><td class="num">64.7%</td></tr>
+    <tr><td>长电科技</td><td>600584.SH</td><td class="num">1,231</td><td class="num">63.5</td><td class="num">4.2</td><td class="num">195.3</td><td class="num">+5.0%</td><td class="num">8.4</td><td class="num hl-pos">+75.4%</td><td class="num">6.7%</td><td class="num">15.0%</td></tr>
+    <tr><td>豪威集团(原韦尔)</td><td>603501.SH</td><td class="num">1,014</td><td class="num">31.6</td><td class="num">3.2</td><td class="num">140.2</td><td class="num">[未获取]</td><td class="num">—</td><td class="num">—</td><td class="num">10.0%</td><td class="num">29.8%</td></tr>
+    <tr><td>瑞芯微</td><td>603893.SH</td><td class="num">927</td><td class="num">67.8</td><td class="num">17.8</td><td class="num">28.8</td><td class="num hl-pos">+40.6%</td><td class="num">8.6</td><td class="num hl-pos">+61.7%</td><td class="num">27.8%</td><td class="num">43.9%</td></tr>
+    <tr><td>恒玄科技</td><td>688608.SH</td><td class="num">258</td><td class="num">56.0</td><td class="num">3.8</td><td class="num">13.5</td><td class="num hl-neg">-30.3%</td><td class="num">1.7</td><td class="num hl-neg">-43.9%</td><td class="num">6.5%</td><td class="num">40.0%</td></tr>
+    <tr class="wallrow"><td colspan="11">能源墙（9家 · 市值合计14,454亿）</td></tr>
+    <tr><td>长江电力</td><td>600900.SH</td><td class="num">6,939</td><td class="num">19.2</td><td class="num">3.5</td><td class="num">379.3</td><td class="num">+3.4%</td><td class="num">147.6</td><td class="num">+13.2%</td><td class="num">16.8%</td><td class="num">62.4%</td></tr>
+    <tr><td>中国核电</td><td>601985.SH</td><td class="num">1,831</td><td class="num">25.1</td><td class="num">1.6</td><td class="num">384.0</td><td class="num hl-neg">-6.3%</td><td class="num">36.4</td><td class="num hl-neg">-36.0%</td><td class="num">6.1%</td><td class="num">36.9%</td></tr>
+    <tr><td>国电南瑞</td><td>600406.SH</td><td class="num">1,789</td><td class="num">21.3</td><td class="num">3.7</td><td class="num">277.7</td><td class="num">+14.5%</td><td class="num">30.7</td><td class="num">+4.0%</td><td class="num">16.1%</td><td class="num">25.4%</td></tr>
+    <tr><td>三峡能源</td><td>600905.SH</td><td class="num">1,032</td><td class="num">92.3</td><td class="num">1.2</td><td class="num">133.6</td><td class="num hl-neg">-9.4%</td><td class="num">12.2</td><td class="num hl-neg">-64.3%</td><td class="num">1.3%</td><td class="num">35.9%</td></tr>
+    <tr><td>特变电工</td><td>600089.SH</td><td class="num">889</td><td class="num">16.7</td><td class="num">1.3</td><td class="num">565.8</td><td class="num">+16.9%</td><td class="num">25.5</td><td class="num hl-neg">-11.8%</td><td class="num">7.5%</td><td class="num">19.0%</td></tr>
+    <tr><td>英维克</td><td>002837.SZ</td><td class="num">732</td><td class="num">149.0</td><td class="num">20.4</td><td class="num">30.2</td><td class="num">+17.2%</td><td class="num">1.8</td><td class="num hl-neg">-12.9%</td><td class="num">13.7%</td><td class="num">27.2%</td></tr>
+    <tr><td>麦格米特</td><td>002851.SZ</td><td class="num">717</td><td class="num">319.9</td><td class="num">7.9</td><td class="num">60.6</td><td class="num">+29.7%</td><td class="num">2.5</td><td class="num">+48.3%</td><td class="num">2.5%</td><td class="num">21.8%</td></tr>
+    <tr><td>金盘科技</td><td>688676.SH</td><td class="num">285</td><td class="num">40.9</td><td class="num">5.5</td><td class="num">35.6</td><td class="num">+12.7%</td><td class="num">3.0</td><td class="num">+13.9%</td><td class="num">13.7%</td><td class="num">26.6%</td></tr>
+    <tr><td>科华数据</td><td>002335.SZ</td><td class="num">240</td><td class="num">42.1</td><td class="num">3.6</td><td class="num">38.8</td><td class="num">+4.1%</td><td class="num">4.0</td><td class="num hl-pos">+61.2%</td><td class="num">8.7%</td><td class="num">24.3%</td></tr>
+    <tr class="wallrow"><td colspan="11">数据墙（8家 · 市值合计17,049亿，其中中国移动14,994亿）</td></tr>
+    <tr><td>中国移动</td><td>600941.SH</td><td class="num">14,994</td><td class="num">16.0</td><td class="num">1.5</td><td class="num">5,380.4</td><td class="num">-1.1%</td><td class="num">789.3</td><td class="num">-6.2%</td><td class="num">9.3%</td><td class="num">27.8%</td></tr>
+    <tr><td>润泽科技</td><td>300442.SZ</td><td class="num">1,116</td><td class="num">20.8</td><td class="num">8.3</td><td class="num">37.5</td><td class="num hl-pos">+50.1%</td><td class="num">12.3</td><td class="num hl-pos">+39.1%</td><td class="num">37.1%</td><td class="num">45.1%</td></tr>
+    <tr><td>数据港</td><td>603881.SH</td><td class="num">206</td><td class="num">147.8</td><td class="num">6.1</td><td class="num">7.8</td><td class="num hl-neg">-3.6%</td><td class="num">0.9</td><td class="num">+1.1%</td><td class="num">4.1%</td><td class="num">37.8%</td></tr>
+    <tr><td>光环新网</td><td>300383.SZ</td><td class="num">199</td><td class="num">亏损</td><td class="num">1.7</td><td class="num">33.3</td><td class="num hl-neg">-10.3%</td><td class="num">0.6</td><td class="num hl-neg">-51.5%</td><td class="num">-6.8%</td><td class="num">13.2%</td></tr>
+    <tr><td>奥飞数据</td><td>300738.SZ</td><td class="num">190</td><td class="num">78.9</td><td class="num">5.2</td><td class="num">14.7</td><td class="num">+27.9%</td><td class="num">2.2</td><td class="num hl-pos">+127.0%</td><td class="num">6.6%</td><td class="num">35.1%</td></tr>
+    <tr><td>中文在线</td><td>300364.SZ</td><td class="num">178</td><td class="num">亏损</td><td class="num">67.7</td><td class="num">5.8</td><td class="num">+3.9%</td><td class="num">-0.4</td><td class="num">减亏</td><td class="num">亏损</td><td class="num">42.2%</td></tr>
+    <tr><td>视觉中国</td><td>000681.SZ</td><td class="num">112</td><td class="num">79.7</td><td class="num">3.1</td><td class="num">3.7</td><td class="num hl-neg">-7.3%</td><td class="num">1.0</td><td class="num hl-pos">+115.7%</td><td class="num">3.8%</td><td class="num">41.6%</td></tr>
+    <tr><td>海天瑞声</td><td>688787.SH</td><td class="num">54</td><td class="num">270.0</td><td class="num">7.5</td><td class="num">1.9</td><td class="num">+22.5%</td><td class="num">0.1</td><td class="num hl-pos">+211.5%</td><td class="num">2.7%</td><td class="num">47.8%</td></tr>
+    <tr class="wallrow"><td colspan="11">信任墙（7家 · 市值合计1,397亿）</td></tr>
+    <tr><td>深信服</td><td>300454.SZ</td><td class="num">613</td><td class="num">71.9</td><td class="num">5.5</td><td class="num">40.0</td><td class="num hl-pos">+32.8%</td><td class="num">2.3</td><td class="num hl-pos">+201.6%</td><td class="num">7.7%</td><td class="num">59.1%</td></tr>
+    <tr><td>达梦数据</td><td>688692.SH</td><td class="num">230</td><td class="num">43.1</td><td class="num">5.9</td><td class="num">7.1</td><td class="num hl-pos">+36.3%</td><td class="num">2.2</td><td class="num">+6.7%</td><td class="num">13.8%</td><td class="num">95.7%</td></tr>
+    <tr><td>启明星辰</td><td>002439.SZ</td><td class="num">174</td><td class="num">亏损TTM</td><td class="num">1.6</td><td class="num">12.3</td><td class="num">+9.0%</td><td class="num">0.3</td><td class="num hl-pos">+131.9%</td><td class="num">-4.1%</td><td class="num">56.5%</td></tr>
+    <tr><td>奇安信</td><td>688561.SH</td><td class="num">195</td><td class="num">亏损</td><td class="num">2.8</td><td class="num">15.0</td><td class="num hl-neg">-14.1%</td><td class="num">-4.1</td><td class="num">减亏46.6%</td><td class="num">-13.2%</td><td class="num">49.6%</td></tr>
+    <tr><td>国投智能(原美亚柏科)</td><td>300188.SZ</td><td class="num">90</td><td class="num">亏损</td><td class="num">3.8</td><td class="num">4.9</td><td class="num hl-neg">-12.9%</td><td class="num">-2.5</td><td class="num hl-neg">亏损扩大</td><td class="num">-34.9%</td><td class="num">31.4%</td></tr>
+    <tr><td>安恒信息</td><td>688023.SH</td><td class="num">49</td><td class="num">亏损</td><td class="num">2.3</td><td class="num">7.4</td><td class="num">+0.9%</td><td class="num">-1.8</td><td class="num">减亏9.1%</td><td class="num">-1.8%</td><td class="num">62.2%</td></tr>
+    <tr><td>三未信安</td><td>688489.SH</td><td class="num">46</td><td class="num">亏损TTM</td><td class="num">2.6</td><td class="num">2.1</td><td class="num">+7.4%</td><td class="num">-0.1</td><td class="num">减亏</td><td class="num">-1.5%</td><td class="num">71.9%</td></tr>
+  </table>
+  </div>
+  <p class="foot">数据来源：同花顺iFinD MCP（财务为2026年中报MRQ口径，估值/市值为最新收盘TTM口径）。润泽科技、奥飞数据、数据港、光环新网的归母净利为"营收×销售净利率"推算值；豪威集团营收增速该数据源未返回，标注[未获取]。</p>
+
+  <h3>7.2 护城河评估（核心标的）</h3>
+  <table>
+    <tr><th>公司</th><th>网络效应</th><th>转换成本</th><th>规模经济</th><th>无形资产/牌照</th><th>综合判定</th></tr>
+    <tr><td>中际旭创</td><td>弱</td><td>中（云厂商认证周期长）</td><td>强（硅光产能+良率）</td><td>强（1.6T硅光专利）</td><td><span class="hl-pos">强护城河</span></td></tr>
+    <tr><td>新易盛</td><td>弱</td><td>中</td><td>强</td><td>中</td><td><span class="hl-pos">强护城河</span></td></tr>
+    <tr><td>海光信息</td><td>中（x86生态兼容）</td><td>强（生态迁移成本）</td><td>中</td><td>强（授权+国产化名录）</td><td><span class="hl-pos">强护城河</span></td></tr>
+    <tr><td>寒武纪</td><td>弱（CUDA生态差距）</td><td>中</td><td>弱</td><td>强（国产AI芯片稀缺性）</td><td>中（政策护城河为主）</td></tr>
+    <tr><td>北方华创</td><td>弱</td><td>强（产线验证周期）</td><td>强（平台化）</td><td>中</td><td><span class="hl-pos">强护城河</span></td></tr>
+    <tr><td>豪威集团</td><td>弱</td><td>中</td><td>强（CIS全球前三）</td><td>强（车规/机器人CIS卡位）</td><td><span class="hl-pos">强护城河</span></td></tr>
+    <tr><td>瑞芯微</td><td>中（开发生态）</td><td>中</td><td>中</td><td>强（AIoT SoC生态）</td><td>中</td></tr>
+    <tr><td>长江电力</td><td>—</td><td>极强（六库联调资源独占）</td><td>极强</td><td>特许经营</td><td><span class="hl-pos">极强（受电价管制）</span></td></tr>
+    <tr><td>国电南瑞</td><td>—</td><td>极强（电网二次设备主导地位）</td><td>强</td><td>强（国网体系）</td><td><span class="hl-pos">极强</span></td></tr>
+    <tr><td>润泽科技</td><td>弱</td><td>中（客户迁址成本）</td><td>中</td><td>中强（核心节点电力指标稀缺）</td><td>中强</td></tr>
+    <tr><td>中国移动</td><td>强（用户规模）</td><td>强</td><td>极强</td><td>特许经营</td><td><span class="hl-pos">极强（增长受限）</span></td></tr>
+    <tr><td>达梦数据</td><td>中（信创生态）</td><td>强（数据库迁移成本）</td><td>弱</td><td>中强（党政信创份额）</td><td>中强</td></tr>
+  </table>
+  <p class="foot">护城河评级为分析推断，基于公开业务信息与竞争结构，非官方评级。</p>
+
+  <h3>7.3 战略群组与情景假设</h3>
+  <ul>
+    <li><strong>群组A·全球寡头</strong>（全球份额领先、直接收取行业景气）：中际旭创、新易盛、豪威集团（CIS）、兆易创新（NOR）——特征：海外云厂商供应链、以美元计价的资本开支周期。</li>
+    <li><strong>群组B·国产替代</strong>（政策壁垒、格局清晰）：寒武纪、海光信息、北方华创、达梦数据——特征：需求来自国产化名录与合规采购，估值含"安全溢价"。</li>
+    <li><strong>群组C·特许经营现金牛</strong>：长江电力、国电南瑞、中国移动、中国核电——特征：类债现金流，受益于AI负荷的长期增长但短期弹性小。</li>
+    <li><strong>群组D·碎片化成长</strong>（格局未定、靠执行）：端侧SoC（瑞芯微/恒玄）、液冷（英维克）、DC电源（麦格米特/科华/金盘）、二线IDC（奥飞/数据港）、网安与数据服务——特征：赛道正确、竞争激烈、盈利兑现度分化极大。</li>
+  </ul>
+  <div class="grid2">
+    <div class="callout blue">
+      <strong>算力墙情景假设：</strong>Bull（30%）：2027年云资本开支增速维持30%+，1.6T→3.2T切换顺利、端侧Agent硬件放量 → 龙头盈利再上台阶。Base（50%）：资本开支增速回落至15–20%，光模块"量增价减"、端侧渐进渗透 → 龙头以量补价。Bear（20%）：AI商业化不及预期、2027年资本开支负增长，或CPO提前替代可插拔 → 量价双杀，估值中枢下移30–50%。
+    </div>
+    <div class="callout">
+      <strong>能源墙情景假设：</strong>Bull（35%）：算电协同项目加速+电价机制理顺 → 电网设备/核电量价齐升。Base（45%）：电网投资高增但运营商盈利承压延续。Bear（20%）：算力扩张慢于预期，电力重回过剩，电价继续下行 →运营商ROE中枢下移。
+    </div>
+  </div>
+
+  <div id="chartScatter" class="chart"></div>
+  <p class="chart-note">图3：四墙定位图——PE(TTM)×2026H1营收增速，气泡大小=市值，颜色=所属墙。亏损标的（PE为负）未纳入。数据来源：同花顺iFinD（2026中报+最新收盘）。左下象限（低估值低增速）聚集特许经营类，右上区域（高估值高增速）为算力核心，<strong>左上象限（低估值高增速）是最值得研究的"性价比区"：中际旭创、新易盛、兆易创新、润泽科技</strong>。</p>
+</section>
+
+<!-- ================= 八、估值对比 ================= -->
+<section id="s8">
+  <h2>八、估值对比：算力龙头以增速消化估值，信任墙定价的是立法期权</h2>
+  <div id="chartWall" class="chart chart-sm"></div>
+  <p class="chart-note">图4：四墙市值结构（亿元）。算力墙4.29万亿（57%）对信任墙1,397亿（1.8%）——市场已经用市值完成了一次"垄断性投票"。数据来源：同花顺iFinD，35只标的池合计75,760亿。</p>
+  <h3>8.1 统计分位（仅统计PE为正标的）</h3>
+  <table>
+    <tr><th>分组</th><th class="num">样本数(正PE/总)</th><th class="num">PE中位数</th><th class="num">PE 25分位</th><th class="num">PE 75分位</th><th class="num">PB中位数</th><th class="num">ROE(TTM)中位数</th></tr>
+    <tr><td>算力墙</td><td class="num">11/11</td><td class="num">63.5</td><td class="num">46.2</td><td class="num">85.2</td><td class="num">12.1</td><td class="num">14.0%</td></tr>
+    <tr><td>能源墙</td><td class="num">9/9</td><td class="num">40.9</td><td class="num">19.2</td><td class="num">92.3</td><td class="num">3.5</td><td class="num">8.7%</td></tr>
+    <tr><td>数据墙</td><td class="num">6/8</td><td class="num">79.3</td><td class="num">20.8</td><td class="num">147.8</td><td class="num">5.7</td><td class="num">5.2%</td></tr>
+    <tr><td>信任墙</td><td class="num">2/7</td><td class="num">57.5</td><td class="num">43.1</td><td class="num">71.9</td><td class="num">2.8</td><td class="num">-1.5%</td></tr>
+    <tr class="stat"><td>全池</td><td class="num">28/35</td><td class="num">59.8</td><td class="num">25.1</td><td class="num">85.2</td><td class="num">5.5</td><td class="num">9.3%</td></tr>
+  </table>
+  <p class="foot">分组中位数按组内正PE样本计算；信任墙7家中5家PE(TTM)为负，其"中位数"仅由深信服、达梦数据两只盈利标的构成，参考意义有限。全池PE中位数59.8由28只正PE样本计算。</p>
+  <h3>8.2 异常值与质量警示</h3>
+  <ul>
+    <li><span class="hl-neg">麦格米特（PE 319.9）</span>：净利率仅2.7%，英伟达链电源叙事远领先于盈利兑现。</li>
+    <li><span class="hl-neg">英维克（PE 149.0）</span>：2026H1净利-12.9%，液冷渗透率提升但竞争加剧，估值透支需业绩追赶。</li>
+    <li><span class="hl-warn">寒武纪（PE 206.0）/海光信息（PE 183.7）</span>：高增长支撑（寒武纪PEG约0.60、海光PEG约7.13，LYR口径），两者分化极大；且经营现金流TTM均为负（备货扩张），利润质量需跟踪。</li>
+    <li><span class="hl-neg">三峡能源（PE 92.3）</span>：净利-64.3%导致PE失真，属于"盈利下修型"高PE，非成长型高PE。</li>
+    <li><span class="hl-warn">润泽科技（PE 20.8）</span>：TTM净利率77.9%显著高于2026H1的32.7%，TTM口径或含大额非经常性收益，PE(TTM)可能低估真实经营估值，需核验年报非经常损益。</li>
+    <li><span class="hl-neg">亏损股（7只）</span>：光环新网、中文在线、奇安信、安恒信息、启明星辰(TTM)、国投智能、三未信安(TTM)——PE统计已剔除；中文在线PB高达67.7倍，为全池最高。</li>
+    <li><span class="hl-warn">应收账款质量</span>：网安板块应收周转天数普遍在130–600天区间（奇安信588天、启明星辰602天），政府与大客户回款慢是板块性约束。</li>
+  </ul>
+  <h3>8.3 一致预期与缺失说明</h3>
+  <p>本次数据源未返回卖方一致预期（EPS/营收预测）字段，PEG采用数据终端LYR口径，标注为[UNSOURCED-一致预期未获取]；如需对单一标的做盈利预测核验，可在财报解读流程中单独深挖。</p>
+</section>
+
+<!-- ================= 九、观察清单 ================= -->
+<section id="s9">
+  <h2>九、观察清单：核心七家 · 弹性六家 · 远期期权五家（非投资建议）</h2>
+  <p><strong>筛选逻辑：</strong>第一层要求 PE低于所属墙中位数（或PEG明显小于1）＋ROE(TTM)高于10%＋2026H1营收净利双正增长；第二层为景气与份额兑现但估值高于中位数的进攻型标的；第三层为主题方向正确、基本面尚未兑现的期权型标的。<strong>本清单仅为研究观察清单，不构成任何买卖建议。</strong></p>
+  <h3>第一层 · 核心观察（基本面与估值匹配度最好）<span class="badge b-core">CORE</span></h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>代码</th><th>名称</th><th>墙</th><th>核心逻辑</th><th class="num">PE</th><th class="num">vs全池中位(59.8)</th><th>催化剂</th><th>关键风险</th></tr>
+    <tr><td>300308.SZ</td><td>中际旭创</td><td>算力</td><td>1.6T硅光全球市占率超五成、订单排至2027，净利+247%</td><td class="num">51.6</td><td class="num hl-pos">-14%</td><td>3.2T导入、海外扩产</td><td>CPO替代可插拔、云资本开支波动</td></tr>
+    <tr><td>300502.SZ</td><td>新易盛</td><td>算力</td><td>ROE 54%、净利+92%，光模块双寡头之二</td><td class="num">46.2</td><td class="num hl-pos">-23%</td><td>1.6T份额提升</td><td>客户集中、技术迭代</td></tr>
+    <tr><td>603986.SH</td><td>兆易创新</td><td>算力</td><td>存储超级周期净利+1071%，端侧NOR/MCU双受益</td><td class="num">34.1</td><td class="num hl-pos">-43%</td><td>存储涨价延续、端侧硬件放量</td><td>存储价格周期反转</td></tr>
+    <tr><td>300442.SZ</td><td>润泽科技</td><td>数据</td><td>数据中心墙中唯一"高增长+低PE"，营收+50%、ROE 37%</td><td class="num">20.8</td><td class="num hl-pos">-65%</td><td>智算中心上架率爬坡</td><td>非经常损益占比、折旧压力（见8.2警示）</td></tr>
+    <tr><td>600900.SH</td><td>长江电力</td><td>能源</td><td>水电资源独占的"类债核心"，AI负荷长期增长的卖水人</td><td class="num">19.2</td><td class="num hl-pos">-68%</td><td>来水改善、利率下行</td><td>来水波动、电价政策</td></tr>
+    <tr><td>600406.SH</td><td>国电南瑞</td><td>能源</td><td>电网智能化/特高压主导者，算电协同最直接受益</td><td class="num">21.3</td><td class="num hl-pos">-64%</td><td>电网投资加码、电力缺口268GW叙事</td><td>电网招标节奏</td></tr>
+    <tr><td>600941.SH</td><td>中国移动</td><td>数据</td><td>PE 16+股息，算力网络与运营商数据的防御型敞口</td><td class="num">16.0</td><td class="num hl-pos">-73%</td><td>算力网络收入放量</td><td>传统业务下滑、资本开支分流</td></tr>
+  </table>
+  </div>
+  <h3>第二层 · 高弹性观察（景气兑现、估值已高）<span class="badge b-elas">ALPHA</span></h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>代码</th><th>名称</th><th>墙</th><th>核心逻辑</th><th class="num">PE</th><th class="num">vs全池中位</th><th>催化剂</th><th>关键风险</th></tr>
+    <tr><td>688256.SH</td><td>寒武纪</td><td>算力</td><td>国产AI芯片旗手，营收+108%、净利+123%，PEG约0.6</td><td class="num">206.0</td><td class="num hl-neg">+244%</td><td>国产算力采购加码</td><td>生态差距、现金流为负、绝对估值极高</td></tr>
+    <tr><td>688041.SH</td><td>海光信息</td><td>算力</td><td>CPU+DCU双线、x86生态迁移成本高</td><td class="num">183.7</td><td class="num hl-neg">+207%</td><td>信创+智算替代</td><td>PEG高达7.1，估值消化依赖增速上修</td></tr>
+    <tr><td>603893.SH</td><td>瑞芯微</td><td>算力</td><td>端侧Agent/机器人SoC龙头，ROE 27.8%——"下一棒"首选</td><td class="num">67.8</td><td class="num hl-warn">+13%</td><td>AI眼镜/机器人放量</td><td>消费电子需求波动、格局碎片化</td></tr>
+    <tr><td>002371.SZ</td><td>北方华创</td><td>算力</td><td>设备平台化龙头，2026全球设备市场+25%</td><td class="num">83.4</td><td class="num hl-neg">+39%</td><td>先进封装扩产（HBM/CoWoS）</td><td>净利增速放缓（2026H1仅+0.9%）</td></tr>
+    <tr><td>002837.SZ</td><td>英维克</td><td>能源</td><td>液冷温控龙头，算力密度提升的必经之路</td><td class="num">149.0</td><td class="num hl-neg">+149%</td><td>液冷渗透率提升、海外突破</td><td>净利-12.9%，估值透支需业绩追</td></tr>
+    <tr><td>688676.SH</td><td>金盘科技</td><td>能源</td><td>干式变压器出海+数据中心供电，估值相对温和</td><td class="num">40.9</td><td class="num hl-pos">-32%</td><td>欧美变压器缺口</td><td>海外贸易政策、原材料价格</td></tr>
+  </table>
+  </div>
+  <h3>第三层 · 远期期权观察（主题正确、基本面未兑现）<span class="badge b-opt">OPTION</span></h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>代码</th><th>名称</th><th>墙</th><th>核心逻辑</th><th class="num">PE</th><th>催化剂</th><th>关键风险</th></tr>
+    <tr><td>603501.SH</td><td>豪威集团(原韦尔)</td><td>算力</td><td>机器人/AI眼镜视觉感知（CIS占营收73.6%），PE 31.6为算力墙最低档</td><td class="num">31.6</td><td>机器人传感放量、高端CIS国产化</td><td>消费电子周期、端侧竞争</td></tr>
+    <tr><td>300454.SZ</td><td>深信服</td><td>信任</td><td>网安龙头净利+201.6%率先回升，AI安全工具化最佳载体</td><td class="num">71.9</td><td>《人工智能法》落地、AI安全预算</td><td>盈利基数仍低、板块应收质量</td></tr>
+    <tr><td>688692.SH</td><td>达梦数据</td><td>信任</td><td>信创数据库、毛利率95.7%，信任墙中稀缺的盈利资产</td><td class="num">43.1</td><td>信创深化、AI向量数据库</td><td>党政预算节奏</td></tr>
+    <tr><td>688561.SH</td><td>奇安信</td><td>信任</td><td>纯度最高的AI安全+数据安全标的，减亏中</td><td class="num">亏损</td><td>AI安全立法强制化（欧/中）</td><td>仍亏损、现金流为负</td></tr>
+    <tr><td>688787.SH</td><td>海天瑞声</td><td>数据</td><td>Agent轨迹数据+具身智能数据服务，39城数据标注试点受益</td><td class="num">270.0</td><td>数据要素政策、具身数据订单</td><td>市值仅54亿、盈利微弱、波动极大</td></tr>
+  </table>
+  </div>
+  <div class="callout">
+    <strong>持仓集中度与拥挤度提示：</strong>①全池75,760亿市值中算力墙占57%，市场对"垄断性"的定价已高度集中于算力——共识本身就是风险；②第一层7只中有4只（旭创/新易盛/兆易/润泽）盈利与全球AI资本开支强相关，共同金主集中度是组合层面最大的相关性风险；③信任墙（市值占比1.8%）与端侧芯片（恒玄负增长验证竞争烈度）是当前市场定价最低的两处"预期差"，但兑现依赖立法与产品周期，只适合以"期权仓位"思维观察；④本清单未包含的长电科技（净利+75.4%、先进封装）与澜起科技（净利+74.5%、内存接口）同样值得纳入算力墙的扩展观察。
+  </div>
+  <h3>逻辑展开（每只2-3句，择要）</h3>
+  <ul>
+    <li><strong>中际旭创</strong>：A股稀缺的"万亿市值+订单可见性"标的，1.6T硅光放量使其成为全球AI资本开支最直接的受益者；PE 51.6倍低于算力墙中位数（63.5），在+247%的净利增速面前估值反而被动收缩——这是"以增速消化估值"的典型形态。核心变量是2027年3.2T代际切换与CPO路线的节奏。</li>
+    <li><strong>兆易创新</strong>：存储超级周期的A股最大受益者（HBM挤占产能→利基DRAM/NOR涨价），净利+1071%；同时其NOR+MCU组合直接卡位端侧Agent硬件的存储与控制环节——一只股票同时暴露于"云端周期"与"端侧成长"两个逻辑。</li>
+    <li><strong>润泽科技</strong>：数据墙中唯一兼具高增长（营收+50%）与低估值（PE 20.8）的资产，智算中心+液冷一体化交付；需核验TTM净利率异常（77.9%）中非经常性损益的占比后再确认估值成色。</li>
+    <li><strong>长江电力/国电南瑞</strong>：能源墙的"一稳一动"组合——长电是AI负荷长期增长的类债卖水人（不赌电价），南瑞直接受益于268GW电力缺口叙事下的电网投资周期。</li>
+    <li><strong>寒武纪</strong>：国产算力的"国家队"叙事最强兑现者，但206倍PE+负经营现金流意味着它定价了"完美国产替代"；PEG 0.6与绝对估值极高并存，仓位属性是期权而非核心。</li>
+    <li><strong>瑞芯微/豪威集团</strong>：端侧Agent与机器人"下一棒"的A股双入口——瑞芯微买"大脑"（SoC+NPU），豪威买"眼睛"（CIS）；豪威31.6倍PE提供了算力墙内少见的估值安全垫。</li>
+    <li><strong>深信服/达梦/奇安信/海天瑞声</strong>：信任墙与数据服务的"立法期权"组合——逻辑兑现的扳机不在产业而在政策（人工智能法、数据要素试点），用小仓位高波动的期权思维对待。</li>
+  </ul>
+</section>
+
+<!-- ================= 十、免责声明 ================= -->
+<section id="s10">
+  <h2>十、免责声明</h2>
+  <div class="disclaimer">
+    <p>1. 本报告由AI基于公开信息与金融数据终端（同花顺iFinD MCP）整理生成，仅供研究参考，<strong>不构成任何投资建议、个股推荐或买卖指令</strong>。"观察清单"仅为研究筛选结果，不代表任何机构观点。</p>
+    <p>2. 报告中财务数据为2026年中报（报告期2026-06-30）口径，行情与估值为数据终端最新收盘（2026-09-25前后）口径，宏观与行业数据来源已在脚注标注；其中标注"分析推断""自行计算"的内容为作者基于公开数据的推演，非官方数据。个别字段（如豪威集团营收增速、一致预期）数据源未返回，已如实标注[未获取]/[UNSOURCED]。</p>
+    <p>3. 行业预测（如2030年算力用电占比、电力缺口、资本开支展望）均引自第三方机构公开预估，存在不确定性，不构成对未来表现的承诺。护城河评级、情景假设概率为分析推断。</p>
+    <p>4. 股市有风险，投资需谨慎。使用者应独立判断并自行承担投资决策的全部后果。</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+function mk(id,opt){var el=document.getElementById(id);if(!el||typeof echarts==='undefined')return;var c=echarts.init(el);opt.color=opt.color||['#1a3a5c','#4a7ba6','#d68910','#8e6bbf','#c0392b'];opt.textStyle={fontFamily:'PingFang SC, Microsoft YaHei, sans-serif'};c.setOption(opt);window.addEventListener('resize',function(){c.resize();});}
+
+/* 图1 全社会用电量 */
+mk('chartPower',{
+  tooltip:{trigger:'axis'},
+  legend:{data:['全社会用电量(亿千瓦时)','同比增速(%)']},
+  grid:{left:60,right:60,top:40,bottom:40},
+  xAxis:{type:'category',data:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025']},
+  yAxis:[{type:'value',name:'亿千瓦时'},{type:'value',name:'%',max:12,splitLine:{show:false}}],
+  series:[
+    {name:'全社会用电量(亿千瓦时)',type:'bar',data:[55500,59198,63077,68449,72255,75110,83128,86372,92238,98540,103682],itemStyle:{color:'#1a3a5c'},barWidth:'55%',
+     markPoint:{data:[{coord:['2025',103682],value:'算力仅占1.6%',symbolOffset:[0,-40]}]}},
+    {name:'同比增速(%)',type:'line',yAxisIndex:1,data:[0.96,4.94,6.56,8.43,4.44,3.24,10.35,3.61,6.66,6.83,5.21],itemStyle:{color:'#d68910'},lineStyle:{width:2.5},smooth:true}
+  ]
+});
+
+/* 图2 资本开支与算力用电占比 */
+mk('chartCapex',{
+  tooltip:{trigger:'axis'},
+  legend:{data:['北美四大云厂商资本开支(亿美元)','中国算力中心用电占比(%)']},
+  grid:{left:70,right:70,top:40,bottom:40},
+  xAxis:{type:'category',data:['2026Q1','2026Q2','2025','2030E']},
+  yAxis:[{type:'value',name:'亿美元',max:2000},{type:'value',name:'%',max:8,splitLine:{show:false}}],
+  series:[
+    {name:'北美四大云厂商资本开支(亿美元)',type:'bar',data:[1288,1639,null,null],itemStyle:{color:'#1a3a5c'},barWidth:30},
+    {name:'中国算力中心用电占比(%)',type:'line',yAxisIndex:1,data:[null,null,1.6,6.0],itemStyle:{color:'#c0392b'},lineStyle:{width:2.5},symbol:'diamond',symbolSize:12}
+  ]
+});
+
+/* 图3 定位散点 */
+var walls={'算力墙':'#1a3a5c','能源墙':'#d68910','数据墙':'#5b8db8','信任墙':'#8e6bbf'};
+var data=[
+ {n:'中际旭创',w:'算力墙',x:182.5,y:51.6,z:10624},{n:'新易盛',w:'算力墙',x:100.3,y:46.2,z:6067},
+ {n:'兆易创新',w:'算力墙',x:178.7,y:34.1,z:2714},{n:'寒武纪',w:'算力墙',x:108.1,y:206.0,z:6864},
+ {n:'海光信息',w:'算力墙',x:66.5,y:183.7,z:5771},{n:'澜起科技',w:'算力墙',x:26.7,y:85.2,z:2651},
+ {n:'北方华创',w:'算力墙',x:24.9,y:83.4,z:4739},{n:'瑞芯微',w:'算力墙',x:40.6,y:67.8,z:927},
+ {n:'长电科技',w:'算力墙',x:5.0,y:63.5,z:1231},{n:'恒玄科技',w:'算力墙',x:-30.3,y:56.0,z:258},
+ {n:'长江电力',w:'能源墙',x:3.4,y:19.2,z:6939},{n:'国电南瑞',w:'能源墙',x:14.5,y:21.3,z:1789},
+ {n:'中国核电',w:'能源墙',x:-6.3,y:25.1,z:1831},{n:'三峡能源',w:'能源墙',x:-9.4,y:92.3,z:1032},
+ {n:'特变电工',w:'能源墙',x:16.9,y:16.7,z:889},{n:'金盘科技',w:'能源墙',x:12.7,y:40.9,z:285},
+ {n:'英维克',w:'能源墙',x:17.2,y:149.0,z:732},{n:'麦格米特',w:'能源墙',x:29.7,y:319.9,z:717},
+ {n:'科华数据',w:'能源墙',x:4.1,y:42.1,z:240},
+ {n:'润泽科技',w:'数据墙',x:50.1,y:20.8,z:1116},{n:'奥飞数据',w:'数据墙',x:27.9,y:78.9,z:190},
+ {n:'数据港',w:'数据墙',x:-3.6,y:147.8,z:206},{n:'中国移动',w:'数据墙',x:-1.1,y:16.0,z:14994},
+ {n:'海天瑞声',w:'数据墙',x:22.5,y:270.0,z:54},{n:'视觉中国',w:'数据墙',x:-7.3,y:79.7,z:112},
+ {n:'深信服',w:'信任墙',x:32.8,y:71.9,z:613},{n:'达梦数据',w:'信任墙',x:36.3,y:43.1,z:230}
+];
+mk('chartScatter',{
+  tooltip:{formatter:function(p){return p.data.name+'<br>营收增速：'+p.data.x+'%<br>PE(TTM)：'+p.data.y+'<br>市值：'+p.data.z+'亿';}},
+  legend:{data:Object.keys(walls),top:8},
+  grid:{left:60,right:40,top:50,bottom:50},
+  xAxis:{name:'2026H1营收增速(%)',nameLocation:'middle',nameGap:30,type:'value',splitLine:{lineStyle:{color:'#e8edf2'}}},
+  yAxis:{name:'PE(TTM)',type:'value',max:340,splitLine:{lineStyle:{color:'#e8edf2'}}},
+  series:Object.keys(walls).map(function(w){return{
+    name:w,type:'scatter',itemStyle:{color:walls[w],opacity:.82},
+    symbolSize:function(d){return Math.max(8,Math.sqrt(d[2])/8);},
+    data:data.filter(function(d){return d.w===w;}).map(function(d){return{value:[d.x,d.y,d.z],name:d.n};})
+  };})
+});
+
+/* 图4 四墙市值结构 */
+mk('chartWall',{
+  tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+  grid:{left:70,right:40,top:30,bottom:40},
+  xAxis:{type:'category',data:['算力墙(11家)','能源墙(9家)','数据墙(8家)','信任墙(7家)']},
+  yAxis:{type:'value',name:'亿元'},
+  series:[{type:'bar',barWidth:'52%',
+    data:[
+      {value:42860,itemStyle:{color:'#1a3a5c'}},
+      {value:14454,itemStyle:{color:'#d68910'}},
+      {value:17049,itemStyle:{color:'#5b8db8'}},
+      {value:1397,itemStyle:{color:'#8e6bbf'}}],
+    label:{show:true,position:'top',formatter:function(p){return p.value.toLocaleString()+'亿';}}
+  }]
+});
+})();
+</script>
+</body>
+</html>
