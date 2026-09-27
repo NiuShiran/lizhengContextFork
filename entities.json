@@ -3,7 +3,7 @@
   "query": "AI时代四堵墙（算力墙、能源墙、数据墙、信任墙）深度分析：个人终端Agent与机器人将触发的半导体芯片、中国什么情况下会缺电（含环保要素）、数据墙演化、AI信任与安全，并验证四墙infra垄断论断，产出A股观察清单",
   "sector": "AI基础设施（四墙框架）",
   "sub_sector": "算力半导体 / 电力设备与公用事业 / IDC与数据要素 / 网络安全与信创",
-  "market": "A股",
+  "market": "A股+港股",
   "theme": "AI infra 四墙：算法内卷之外的不变量",
   "entities": [
     {"code": "688256.SH", "name": "寒武纪", "exchange": "SH", "market_cap": 686381572651.84, "role": "target", "wall": "算力墙"},
@@ -40,7 +40,24 @@
     {"code": "002439.SZ", "name": "启明星辰", "exchange": "SZ", "market_cap": 17383592941.75, "role": "target", "wall": "信任墙"},
     {"code": "300188.SZ", "name": "国投智能(原美亚柏科)", "exchange": "SZ", "market_cap": 9033106528.10, "role": "target", "wall": "信任墙"},
     {"code": "688489.SH", "name": "三未信安", "exchange": "SH", "market_cap": 4598970140.40, "role": "target", "wall": "信任墙"},
-    {"code": "688692.SH", "name": "达梦数据", "exchange": "SH", "market_cap": 22961674800.00, "role": "target", "wall": "信任墙"}
+    {"code": "688692.SH", "name": "达梦数据", "exchange": "SH", "market_cap": 22961674800.00, "role": "target", "wall": "信任墙"},
+    {"code": "00981.HK", "name": "中芯国际", "exchange": "HK", "market_cap": 689406540000.00, "role": "target", "wall": "算力墙", "note": "晶圆代工，国产算力制造底座，2026H1净利+105.1%"},
+    {"code": "01347.HK", "name": "华虹宏力(华虹半导体)", "exchange": "HK", "market_cap": 280957370000.00, "role": "target", "wall": "算力墙", "note": "特色工艺代工，2026H1净利+84.2%，PE 265.3"},
+    {"code": "00763.HK", "name": "中兴通讯", "exchange": "HK", "market_cap": 145724700000.00, "role": "target", "wall": "算力墙", "note": "算力网络设备，H股PE 27.9较A股折价"},
+    {"code": "00992.HK", "name": "联想集团", "exchange": "HK", "market_cap": 447179910000.00, "role": "target", "wall": "算力墙", "note": "AI服务器整机，2026H1净利+44.1%"},
+    {"code": "01810.HK", "name": "小米集团-W", "exchange": "HK", "market_cap": 684705150000.00, "role": "target", "wall": "算力墙", "note": "端侧Agent终端载体(车/眼镜/机器人)，PE 18.1"},
+    {"code": "02382.HK", "name": "舜宇光学科技", "exchange": "HK", "market_cap": 71381270000.00, "role": "target", "wall": "算力墙", "note": "机器人/AI眼镜光学，PE 13.1"},
+    {"code": "09660.HK", "name": "地平线机器人-W", "exchange": "HK", "market_cap": 66048100000.00, "role": "target", "wall": "算力墙", "note": "智驾/机器人芯片，2026H1营收+32.9%，仍亏损"},
+    {"code": "03896.HK", "name": "金山云", "exchange": "HK", "market_cap": 23157420000.00, "role": "target", "wall": "算力墙", "note": "算力云，2026H1营收+33.7%，减亏中"},
+    {"code": "01816.HK", "name": "中广核电力", "exchange": "HK", "market_cap": 197914630000.00, "role": "target", "wall": "能源墙", "note": "核电运营，PE 13.1+股息率3.3%，较A股中国核电折价近半"},
+    {"code": "02380.HK", "name": "中国电力", "exchange": "HK", "market_cap": 32657200000.00, "role": "target", "wall": "能源墙", "note": "水电+光伏+储能，股息率7.2%"},
+    {"code": "00836.HK", "name": "华润电力", "exchange": "HK", "market_cap": 98674720000.00, "role": "target", "wall": "能源墙", "note": "火电调峰+新能源，PE 7.4+股息率5.7%"},
+    {"code": "00916.HK", "name": "龙源电力", "exchange": "HK", "market_cap": 92795800000.00, "role": "target", "wall": "能源墙", "note": "风电龙头，电价压力左侧，52周8%低位"},
+    {"code": "00941.HK", "name": "中国移动", "exchange": "HK", "market_cap": 1728200000000.00, "role": "target", "wall": "数据墙", "note": "运营商数据+算力网络，PE 11.3，AH溢价约36%时H股占优"},
+    {"code": "00700.HK", "name": "腾讯控股", "exchange": "HK", "market_cap": 3987300000000.00, "role": "target", "wall": "数据墙", "note": "交互数据资产核心持有者，PE 14.8，52周12%低位"},
+    {"code": "09698.HK", "name": "万国数据-SW", "exchange": "HK", "market_cap": 51937880000.00, "role": "target", "wall": "数据墙", "note": "IDC全国龙头，PE 12.3，2026H1净利+403.2%"},
+    {"code": "00354.HK", "name": "中国软件国际", "exchange": "HK", "market_cap": 10299940000.00, "role": "target", "wall": "信任墙", "note": "信创/Huawei链服务，边缘敞口，非纯信任墙标的"},
+    {"code": "01675.HK", "name": "亚信科技", "exchange": "HK", "market_cap": 3825750000.00, "role": "peer", "wall": "信任墙", "note": "通信软件，2026H1转亏，非纯信任墙标的"}
   ],
   "excluded": [
     {"code": "300369.SZ", "name": "绿盟科技", "reason": "与奇安信/启明星辰业务重叠，信任墙已有5家代表标的"},
@@ -48,10 +65,15 @@
     {"code": "300394.SZ", "name": "天孚通信", "reason": "光器件与中际旭创/新易盛同链条，样本控制"}
   ],
   "data_sources": {
-    "行情与估值": "同花顺iFinD MCP（get_stock_summary，PE/PB/市值，最新收盘，2026-09-25前后）",
-    "财务指标": "同花顺iFinD MCP（2026年中报，报告期20260630）",
+    "A股行情与估值": "同花顺iFinD MCP（get_stock_summary，PE/PB/市值，最新收盘，2026-09-24/25）",
+    "港股行情与估值": "同花顺iFinD MCP港美股（global_stock行情，PE/市值/52周区间/股息率，2026-09-24收盘）",
+    "A股财务指标": "同花顺iFinD MCP（2026年中报，报告期20260630）",
+    "港股财务指标": "同花顺iFinD MCP港美股（2026年中报MRQ：营收/净利增速、ROE）",
+    "A股52周区间": "同花顺iFinD MCP（年最高/最低价、年涨跌幅，2026-09-24，不复权）",
     "宏观电力": "同花顺iFinD EDB（中国电力统计年鉴：全社会用电量2015-2025）",
-    "行业资讯": "同花顺iFinD 新闻检索（2026-05至2026-09，具体来源见报告脚注）"
+    "行业资讯": "同花顺iFinD 新闻检索（2026-05至2026-09，具体来源见报告脚注）",
+    "说明": "52周区间位置、AH溢价（按0.91汇率）、PEG为自行计算；港股通红利税20%为现行税制口径"
   },
-  "generated_at": "2026-09-25T12:00:00+08:00"
+  "generated_at": "2026-09-25T16:30:00+08:00",
+  "version": "V2（新增港股17只、买卖信号、三档持仓组合）"
 }
